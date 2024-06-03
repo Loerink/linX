@@ -1,4 +1,5 @@
 #Programming Style Guide
+
 This guide outlines conventions for writing clean, maintainable code. 
 
 ##Naming Conventions
@@ -20,7 +21,7 @@ class User_Profile:<br>
     //..
 
 - **File and Directory Names**  
- Use UPPER-CASE seperated by dashes for service names\n 
+\t Use UPPER-CASE seperated by dashes for service names\n 
 Use lower-case seperated by dashes for directory and file names 
 
 
