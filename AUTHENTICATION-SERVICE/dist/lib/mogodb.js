@@ -20,12 +20,12 @@ const connect_to_database = () => __awaiter(void 0, void 0, void 0, function* ()
             console.log("\x1b[32m%s\x1b[0m", "[o] Connected to mongodb ...");
         }
         else {
-            console.log("No MongoDB URI found");
+            console.error("No MongoDB URI found");
             process.exit(1);
         }
     }
     catch (err) {
-        console.log(err);
+        console.error(err);
         process.exit(1);
     }
 });
