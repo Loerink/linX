@@ -1,0 +1,47 @@
+{
+
+  "dependencies": {
+
+    "bcrypt": "^5.1.1",
+
+    "body-parser": "^1.20.2",
+
+    "dotenv": "^16.4.5",
+
+    "express": "^4.19.2",
+
+    "jsonwebtoken": "^9.0.2",
+
+    "mongodb": "^6.7.0",
+
+    "mongoose": "^8.4.1"
+
+  },
+
+  "devDependencies": {
+
+    "@types/bcrypt": "^5.0.2",
+
+    "@types/express": "^4.17.21",
+
+    "install": "^0.13.0",
+
+    "npm": "^10.8.1",
+
+    "ts": "^0.2.2",
+
+    "typescript": "^5.4.5"
+
+  },
+
+  "scripts": {
+
+    "test": "echo \"Error: no test specified\" && exit 1",
+
+    "start": "tsc && node dist/index.js",
+
+    "run": "tsc && node dist/index.js"
+
+  }
+
+}
