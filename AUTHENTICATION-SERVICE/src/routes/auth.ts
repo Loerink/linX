@@ -1,0 +1,43 @@
+import Express from "express";
+import StatusCodes from "http-status-codes"
+import User from "../models/users"
+import Helpers from "../lib/helpers"
+import jwt from "jsonwebtoken";
+
+
+const auth_router = Express.Router(); 
+
+
+
+auth_router.post("/", async (req,res)=> {
+    const {email,password} = req.body; 
+    try{
+        const user = await User.findById(email)
+        if(!user){
+            return res.status(StatusCodes.UNAUTHORIZED).json({message:"Wrong username/password"}); 
+        }
+        const hashed_password = Helpers.hash_password(password)
+        if(user.password !== hashed_password){
+            return res.status(StatusCodes.UNAUTHORIZED).json({message:"Wrong username/password"})
+        }
+
+        // Send token in response headers 
+        const token_payload = {
+            id:user._id, 
+            is_verified:user.is_verified,
+            email_verified:user.email_verified,
+            account_verified:user.account_verified
+        }
+        if(!process.env.JWT_SECRET){
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:"Internal server error during auth"})
+        }
+        const token = jwt.sign(token_payload, process.env.JWT_SECRET, { expiresIn: '1h'});
+        res.status(StatusCodes.OK).header({auth:token}).json({message: "Authentication successful"});
+    }
+    catch(err){
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:"Internal server error during auth"})
+        console.error("Error during auth", err);  
+    }   
+});
+
+export default auth_router; 
