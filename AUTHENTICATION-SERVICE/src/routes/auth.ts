@@ -23,15 +23,15 @@ auth_router.post("/", async (req,res)=> {
 
         // Send token in response headers 
         const token_payload = {
-            id:user._id, 
+            _id:user._id, 
             is_verified:user.is_verified,
             email_verified:user.email_verified,
             account_verified:user.account_verified
         }
-        if(!process.env.JWT_SECRET){
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:"Internal server error during auth"})
+        const token = Helpers.generate_user_token_from_payload(token_payload)
+        if(!token){
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message: "Internal server error during auth"});
         }
-        const token = jwt.sign(token_payload, process.env.JWT_SECRET, { expiresIn: '1h'});
         res.status(StatusCodes.OK).header({auth:token}).json({message: "Authentication successful"});
     }
     catch(err){
