@@ -21,6 +21,16 @@ class Helpers{
         }
     }
 
+    static generate_otp(length:number):string{
+        const possible_characters = "qwertyuiopasdfghjklzxcvbnm1234567890";
+        let otp = "";
+        for(let i = 0; i < length; i++){
+            const random_index = Math.floor((Math.random()*possible_characters.length));
+            otp += possible_characters[random_index];
+        }
+        return otp; 
+    }
+
 }
 
 export default Helpers; 
