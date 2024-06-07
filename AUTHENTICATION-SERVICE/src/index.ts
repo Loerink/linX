@@ -3,7 +3,8 @@ import http from "http"
 import dotenv from "dotenv"
 import connect_to_database from "./lib/mogodb"
 import auth_router from "./routes/auth"
-
+import registration_router from "./routes/registration"
+import "./lib/types"
 
 dotenv.config(); 
 
@@ -13,6 +14,7 @@ connect_to_database()
 const app = Express(); 
 app.use(body_parser()); 
 app.use("/api/auth",auth_router); 
+app.use("/api/register",registration_router)
 
 
 const server = http.createServer(app); 
