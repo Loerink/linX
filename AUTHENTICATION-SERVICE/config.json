@@ -7,9 +7,10 @@
     "minimum_lastname_length":1
     },
 
-    "other_configs":
+    "otp_configs":
     {
-        "otp_string_length":5
+        "otp_string_length":5,
+        "otp_expiry_time_ms":300000
     }
     
 }

@@ -2,10 +2,9 @@ import Express from "express";
 import StatusCodes from "http-status-codes"
 import User from "../models/users"
 import Helpers from "../lib/helpers"
-import { Authenticated_Request } from "../lib/types";
 import authentication_middleware from "../middleware/authenticate";
-import { Mongoose_User_Type } from "../lib/types";
-import { Request } from "express";
+import { Request, Response } from "express";
+import Otp from "../models/otp";
 
 const registration_router = Express.Router();
 
@@ -43,15 +42,42 @@ registration_router.post("/",async (req,res)=>{
 })
 
 
-registration_router.post("/verify_email", authentication_middleware,  (req:Request,res:Response)=>{
-    
+registration_router.post("/verify_email", authentication_middleware,  async (req:Request,res:Response)=>{
     try {
         const {user} = req; 
         const {otp} = req.body; 
-        
-    } catch (error) {
-        
+        const otp_document = await Otp.findById(otp); 
+        if(!user){
+            return res.status(StatusCodes.NOT_FOUND).json({message:"User not found"}); 
+        }
+        if(!otp_document){
+            return res.status(StatusCodes.BAD_REQUEST).json({message:"Invalid OTP code"}); 
+        }
+        if(otp_document.user !== user._id){
+            return res.status(StatusCodes.BAD_REQUEST).json({message:"Invalid OTP code"})
+        }
+        user.email_verified = true;
+        if(user.account_verified){
+            user.is_verified = true; 
+        }
+        await user.save(); 
+        const token_payload = {
+            _id:user._id, 
+            is_verified:user.is_verified, 
+            email_verified:user.email_verified, 
+            account_verified:user.account_verified
+    	}
+        const token =  Helpers.generate_user_token_from_payload(token_payload); 
+        if(!token){
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:"Internal server error during registration"}); 
+        }
+        return res.header({auth:token}).status(StatusCodes.OK).json({message:"Email Verification Successful"}); 
+    }
+    catch (error) {
+        console.log(error)
+	    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:"Internal server error during registration"}); 
     }
 })
 
+  
 export default registration_router; 
