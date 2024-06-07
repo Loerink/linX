@@ -2,7 +2,7 @@ import Express from "express";
 import StatusCodes from "http-status-codes"
 import User from "../models/users"
 import Helpers from "../lib/helpers"
-import jwt from "jsonwebtoken";
+
 
 
 const auth_router = Express.Router(); 
