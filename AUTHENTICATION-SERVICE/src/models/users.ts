@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { User} from "../lib/types";
-import config_file from "../../parsed-config-file";
+import config_file from "../parsed-config-file";
 
 
 const users_schema = new mongoose.Schema<User>({

@@ -16,7 +16,6 @@ const express_1 = __importDefault(require("express"));
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const users_1 = __importDefault(require("../models/users"));
 const helpers_1 = __importDefault(require("../lib/helpers"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const auth_router = express_1.default.Router();
 auth_router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
@@ -30,16 +29,16 @@ auth_router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* 
             return res.status(http_status_codes_1.default.UNAUTHORIZED).json({ message: "Wrong username/password" });
         }
         const token_payload = {
-            id: user._id,
+            _id: user._id,
             is_verified: user.is_verified,
             email_verified: user.email_verified,
             account_verified: user.account_verified
         };
-        if (!process.env.JWT_SECRET) {
+        const token = helpers_1.default.generate_user_token_from_payload(token_payload);
+        if (!token) {
             return res.status(http_status_codes_1.default.INTERNAL_SERVER_ERROR).json({ message: "Internal server error during auth" });
         }
-        const token = jsonwebtoken_1.default.sign(token_payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(http_status_codes_1.default.OK).header({ auth: token }).json({ message: "Authentication successful" });
+        res.status(http_status_codes_1.default.OK).header({ authorization: token }).json({ message: "Authentication successful" });
     }
     catch (err) {
         res.status(http_status_codes_1.default.INTERNAL_SERVER_ERROR).json({ message: "Internal server error during auth" });

@@ -9,11 +9,16 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const mogodb_1 = __importDefault(require("./lib/mogodb"));
 const auth_1 = __importDefault(require("./routes/auth"));
 const registration_1 = __importDefault(require("./routes/registration"));
+const cors_1 = __importDefault(require("cors"));
+require("./lib/types");
 dotenv_1.default.config();
 const body_parser = require("body-parser");
 (0, mogodb_1.default)();
 const app = (0, express_1.default)();
 app.use(body_parser());
+app.use((0, cors_1.default)({
+    exposedHeaders: ["authorization"],
+}));
 app.use("/api/auth", auth_1.default);
 app.use("/api/register", registration_1.default);
 const server = http_1.default.createServer(app);

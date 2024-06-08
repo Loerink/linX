@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import config_file from "../../parsed-config-file";
+import config_file from "../parsed-config-file";
 
 const otp_schema = new mongoose.Schema({
     _id:{

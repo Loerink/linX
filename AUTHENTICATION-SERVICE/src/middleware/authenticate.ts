@@ -4,6 +4,7 @@ import User from "../models/users";
 import jwt from "jsonwebtoken"; 
 
 async function authentication_middleware(req:Request,res:Response,next:NextFunction){
+    console.log(req.headers)
     const auth = req.headers.authorization; 
     if(!auth){
         return res.status(StatusCodes.UNAUTHORIZED).json({message:"No token found in request headers"}); 

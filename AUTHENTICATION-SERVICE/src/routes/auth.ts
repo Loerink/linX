@@ -32,7 +32,7 @@ auth_router.post("/", async (req,res)=> {
         if(!token){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message: "Internal server error during auth"});
         }
-        res.status(StatusCodes.OK).header({auth:token}).json({message: "Authentication successful"});
+        res.status(StatusCodes.OK).header({authorization:token}).json({message: "Authentication successful"});
     }
     catch(err){
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:"Internal server error during auth"})

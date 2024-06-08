@@ -1,5 +1,5 @@
 import axios from "axios";
-import config_file from "../../parsed-config-file";
+import config_file from "../parsed-config-file";
 
 class Notification_Service{
     
