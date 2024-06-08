@@ -32,5 +32,19 @@ class Helpers {
         }
         return otp;
     }
+    static add_user_token(res, user) {
+        const token_payload = {
+            _id: user._id,
+            is_verified: user.is_verified,
+            email_verified: user.email_verified,
+            account_verified: user.account_verified
+        };
+        const token = Helpers.generate_user_token_from_payload(token_payload);
+        if (!token) {
+            return false;
+        }
+        res.header({ authorization: token });
+        return true;
+    }
 }
 exports.default = Helpers;

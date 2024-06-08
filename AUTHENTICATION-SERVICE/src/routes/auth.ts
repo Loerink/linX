@@ -1,7 +1,8 @@
 import Express from "express";
-import StatusCodes from "http-status-codes"
-import User from "../models/users"
-import Helpers from "../lib/helpers"
+import status_codes from "http-status-codes"; 
+import User from "../models/users"; 
+import Helpers from "../lib/helpers"; 
+const {OK,UNAUTHORIZED,INTERNAL_SERVER_ERROR} = status_codes; 
 
 
 
@@ -14,29 +15,19 @@ auth_router.post("/", async (req,res)=> {
     try{
         const user = await User.findById(email)
         if(!user){
-            return res.status(StatusCodes.UNAUTHORIZED).json({message:"Wrong username/password"}); 
+            return res.status(UNAUTHORIZED).json({message:"Wrong username/password"}); 
         }
         const hashed_password = Helpers.hash_password(password)
         if(user.password !== hashed_password){
-            return res.status(StatusCodes.UNAUTHORIZED).json({message:"Wrong username/password"})
+            return res.status(UNAUTHORIZED).json({message:"Wrong username/password"})
         }
-
-        // Send token in response headers 
-        const token_payload = {
-            _id:user._id, 
-            is_verified:user.is_verified,
-            email_verified:user.email_verified,
-            account_verified:user.account_verified
-        }
-        const token = Helpers.generate_user_token_from_payload(token_payload)
-        if(!token){
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message: "Internal server error during auth"});
-        }
-        res.status(StatusCodes.OK).header({authorization:token}).json({message: "Authentication successful"});
+        if(!Helpers.add_user_token(res,user)){
+            return res.status(INTERNAL_SERVER_ERROR).json({message:"Internal server error during auth"})
+        }; 
+        res.status(OK).json({message: "Authentication successful"});
     }
     catch(err){
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:"Internal server error during auth"})
-        console.error("Error during auth", err);  
+        Helpers.handle_internal_server_errors(res,err,"Internal server error during auth")
     }   
 });
 
