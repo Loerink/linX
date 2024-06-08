@@ -1,0 +1,22 @@
+{
+    "user_configs":
+    {
+    "maximum_firstname_length":50, 
+    "minimum_firstname_length":1, 
+    "maximum_lastname_length":50, 
+    "minimum_lastname_length":1
+    },
+
+    "otp_configs":
+    {
+        "otp_string_length":5,
+        "otp_expiry_time_ms":300000
+    }, 
+
+    "service_configs":
+    {
+        "notification_service_socket_address":["127.0.0.1",3001]
+
+    }
+    
+}
