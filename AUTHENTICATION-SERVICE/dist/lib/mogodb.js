@@ -14,19 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const connect_to_database = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        if (process.env.MONGO_URI) {
-            yield mongoose_1.default.connect(process.env.MONGO_URI);
-            console.log("\x1b[32m%s\x1b[0m", "[o] Connected to mongodb ...");
-        }
-        else {
-            console.error("No MongoDB URI found");
-            process.exit(1);
-        }
+    if (process.env.MONGO_URI) {
+        yield mongoose_1.default.connect(process.env.MONGO_URI);
+        console.log("\x1b[32m%s\x1b[0m", "[o] Connected to mongodb ...");
     }
-    catch (err) {
-        console.error(err);
-        process.exit(1);
+    else {
+        console.error("\x1b[31m%s\x1b[0m", "No MongoDB URI found");
+        throw (new Error());
     }
 });
 exports.default = connect_to_database;

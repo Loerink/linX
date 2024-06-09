@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const crypto_1 = __importDefault(require("crypto"));
 const jsonwebtoken_1 = require("jsonwebtoken");
+const http_status_codes_1 = __importDefault(require("http-status-codes"));
 class Helpers {
     static hash_password(password) {
         const hash = crypto_1.default.createHash('sha256');
@@ -39,12 +40,16 @@ class Helpers {
             email_verified: user.email_verified,
             account_verified: user.account_verified
         };
-        const token = Helpers.generate_user_token_from_payload(token_payload);
+        const token = this.generate_user_token_from_payload(token_payload);
         if (!token) {
             return false;
         }
         res.header({ authorization: token });
         return true;
+    }
+    static handle_internal_server_errors(res, err, message) {
+        console.error(err);
+        return res.status(http_status_codes_1.default.INTERNAL_SERVER_ERROR).json({ message });
     }
 }
 exports.default = Helpers;
