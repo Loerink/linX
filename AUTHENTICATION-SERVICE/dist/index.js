@@ -5,23 +5,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
-const dotenv_1 = __importDefault(require("dotenv"));
+const dotenv_1 = require("dotenv");
 const mogodb_1 = __importDefault(require("./lib/mogodb"));
-const auth_1 = __importDefault(require("./routes/auth"));
-const registration_1 = __importDefault(require("./routes/registration"));
-const cors_1 = __importDefault(require("cors"));
+const configure_middleware_1 = __importDefault(require("./middleware/configure-middleware"));
+const configure_routes_1 = __importDefault(require("./routes/configure-routes"));
+require("./parsed-config-file");
 require("./lib/types");
-dotenv_1.default.config();
-const body_parser = require("body-parser");
-(0, mogodb_1.default)();
+(0, dotenv_1.config)();
 const app = (0, express_1.default)();
-app.use(body_parser());
-app.use((0, cors_1.default)({
-    exposedHeaders: ["authorization"],
-}));
-app.use("/api/auth", auth_1.default);
-app.use("/api/register", registration_1.default);
+(0, configure_middleware_1.default)(app);
+(0, configure_routes_1.default)(app);
 const server = http_1.default.createServer(app);
-server.listen(process.env.HTTP_PORT, () => {
-    console.log("\x1b[32m%s\x1b[0m", `[o] http server listening on port ${process.env.HTTP_PORT}`);
+(0, mogodb_1.default)().then(() => {
+    server.listen(process.env.HTTP_PORT, () => {
+        console.log("\x1b[32m%s\x1b[0m", `[o] http server listening on port ${process.env.HTTP_PORT}`);
+    });
+}).catch(() => {
+    console.error("\x1b[31m%s\x1b[0m", "could not connect to mongodb");
 });

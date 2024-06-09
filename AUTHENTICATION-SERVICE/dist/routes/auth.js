@@ -36,8 +36,7 @@ auth_router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(OK).json({ message: "Authentication successful" });
     }
     catch (err) {
-        res.status(INTERNAL_SERVER_ERROR).json({ message: "Internal server error during auth" });
-        console.error("Error during auth", err);
+        helpers_1.default.handle_internal_server_errors(res, err, "Internal server error during auth");
     }
 }));
 exports.default = auth_router;
