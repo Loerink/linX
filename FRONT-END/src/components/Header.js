@@ -1,47 +1,25 @@
 import React from 'react';
-import styled from 'styled-components';
+import './Header.css';
 
-const HeaderContainer = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
-`;
-
-const Logo = styled.h1`
-  font-size: 24px;
-  color: #333;
-`;
-
-const Nav = styled.nav`
-  a {
-    margin: 0 15px;
-    font-size: 18px;
-    color: #333;
-    text-transform: uppercase;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: #007BFF;
-    }
-  }
-`;
-
-const Header = () => (
-  <HeaderContainer>
-    <Logo>linX</Logo>
-    <Nav>
-      <a href="#features">Features</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </Nav>
-  </HeaderContainer>
-);
+function Header() {
+  return (
+    <header>
+      <nav>
+        <img src="assets/images/logo.png" alt="linX Logo" />
+        <ul>
+          <li><a href="#product">Product</a></li>
+          <li><a href="#solutions">Solutions</a></li>
+          <li><a href="#open-source">Open Source</a></li>
+          <li><a href="#enterprise">Enterprise</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+        </ul>
+        <div className="auth-buttons">
+          <button className="sign-in">Sign In</button>
+          <button className="sign-up">Sign Up</button>
+        </div>
+      </nav>
+    </header>
+  );
+}
 
 export default Header;
