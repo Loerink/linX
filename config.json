@@ -4,7 +4,9 @@
     "maximum_firstname_length":50, 
     "minimum_firstname_length":1, 
     "maximum_lastname_length":50, 
-    "minimum_lastname_length":1
+    "minimum_lastname_length":1,
+    "maximum_username_length":30, 
+    "minimum_username_length":1
     },
 
     "otp_configs":

@@ -6,6 +6,10 @@ import authentication_middleware from "../middleware/authenticate";
 import Otp from "../models/otp";
 import config_file from "../parsed-config-file";
 import Notification_Service from "../lib/notification-service";
+import { user_validation_schemas } from "../models/users";
+import { otp_validation_schemas } from "../models/otp";
+const {validate_verify_email} = otp_validation_schemas
+const {validate_verify_account,validate_register} = user_validation_schemas
 const {OK,INTERNAL_SERVER_ERROR,BAD_REQUEST,CREATED, NOT_FOUND, CONFLICT} = status_codes
 const registration_router = Express.Router();
 
@@ -14,6 +18,10 @@ const registration_router = Express.Router();
 
 registration_router.post("/",async (req,res)=>{
     try{
+        const { error } = validate_register.validate(req.body);
+        if(error){
+            return res.status(BAD_REQUEST).json({message:error.details[0].message})
+        }
         const {email,password} = req.body; 
         if(await User.exists({_id:email})){
             return res.status(CONFLICT).json({message:"user already exists"}); 
@@ -43,6 +51,10 @@ registration_router.post("/",async (req,res)=>{
 
 registration_router.post("/verify_email", authentication_middleware,  async (req,res)=>{
     try {
+        const { error } = validate_verify_email.validate(req.body);
+        if(error){
+            return res.status(BAD_REQUEST).json({message:error.details[0].message})
+        }
         const {user} = req; 
         const {otp} = req.body; 
         const otp_document = await Otp.findById(otp); 
@@ -72,6 +84,10 @@ registration_router.post("/verify_email", authentication_middleware,  async (req
 
 registration_router.post("/verify_account", authentication_middleware, async (req,res)=>{
     try {
+        const { error } = validate_verify_account.validate(req.body);
+        if(error){
+            return res.status(BAD_REQUEST).json({message:error.details[0].message})
+        }
         const {user} = req
         const {firstname,lastname,username} = req.body 
         if(!user){

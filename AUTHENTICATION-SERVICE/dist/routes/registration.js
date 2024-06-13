@@ -20,10 +20,18 @@ const authenticate_1 = __importDefault(require("../middleware/authenticate"));
 const otp_1 = __importDefault(require("../models/otp"));
 const parsed_config_file_1 = __importDefault(require("../parsed-config-file"));
 const notification_service_1 = __importDefault(require("../lib/notification-service"));
+const users_2 = require("../models/users");
+const otp_2 = require("../models/otp");
+const { validate_verify_email } = otp_2.otp_validation_schemas;
+const { validate_verify_account, validate_register } = users_2.user_validation_schemas;
 const { OK, INTERNAL_SERVER_ERROR, BAD_REQUEST, CREATED, NOT_FOUND, CONFLICT } = http_status_codes_1.default;
 const registration_router = express_1.default.Router();
 registration_router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { error } = validate_register.validate(req.body);
+        if (error) {
+            return res.status(BAD_REQUEST).json({ message: error.details[0].message });
+        }
         const { email, password } = req.body;
         if (yield users_1.default.exists({ _id: email })) {
             return res.status(CONFLICT).json({ message: "user already exists" });
@@ -51,6 +59,10 @@ registration_router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, fu
 }));
 registration_router.post("/verify_email", authenticate_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { error } = validate_verify_email.validate(req.body);
+        if (error) {
+            return res.status(BAD_REQUEST).json({ message: error.details[0].message });
+        }
         const { user } = req;
         const { otp } = req.body;
         const otp_document = yield otp_1.default.findById(otp);
@@ -80,6 +92,10 @@ registration_router.post("/verify_email", authenticate_1.default, (req, res) => 
 }));
 registration_router.post("/verify_account", authenticate_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { error } = validate_verify_account.validate(req.body);
+        if (error) {
+            return res.status(BAD_REQUEST).json({ message: error.details[0].message });
+        }
         const { user } = req;
         const { firstname, lastname, username } = req.body;
         if (!user) {

@@ -16,11 +16,17 @@ const express_1 = __importDefault(require("express"));
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const users_1 = __importDefault(require("../models/users"));
 const helpers_1 = __importDefault(require("../lib/helpers"));
-const { OK, UNAUTHORIZED, INTERNAL_SERVER_ERROR } = http_status_codes_1.default;
+const users_2 = require("../models/users");
+const { validate_register } = users_2.user_validation_schemas;
+const { OK, UNAUTHORIZED, INTERNAL_SERVER_ERROR, BAD_REQUEST } = http_status_codes_1.default;
 const auth_router = express_1.default.Router();
 auth_router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
     try {
+        const { error } = validate_register.validate(req.body);
+        if (error) {
+            return res.status(BAD_REQUEST).json({ message: error.details[0].message });
+        }
+        const { email, password } = req.body;
         const user = yield users_1.default.findById(email);
         if (!user) {
             return res.status(UNAUTHORIZED).json({ message: "Wrong username/password" });

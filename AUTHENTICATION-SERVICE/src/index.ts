@@ -9,6 +9,7 @@ import "./lib/types";
 
 
 
+
 config(); 
 const app = Express(); 
 configure_middleware(app); 
