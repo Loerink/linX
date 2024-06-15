@@ -1,25 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* src/index.css */
+@import './assets/styles/tailwind.css';
 
 /* Custom Styles */
 body {
-  @apply bg-cover bg-center min-h-screen flex flex-col;
-  background-image: url('./assets/images/background.jpg'); /* Adjust the path as necessary */
-}
-
-.fade-in {
-  @apply opacity-0 transition-opacity duration-1000;
-}
-
-.fade-in.show {
-  @apply opacity-100;
-}
-
-.slide-up {
-  @apply transform translate-y-10 transition-transform duration-1000;
-}
-
-.slide-up.show {
-  @apply translate-y-0;
-}
+    @apply bg-cover bg-center min-h-screen flex flex-col;
+    background-image: url('./assets/images/background.jpg'); /* Adjust the path as necessary */
+  }
+  
+  .fade-in {
+    @apply opacity-0 transition-opacity duration-1000;
+  }
+  
+  .fade-in.show {
+    @apply opacity-100;
+  }
+  
+  .slide-up {
+    @apply transform translate-y-10 transition-transform duration-1000;
+  }
+  
+  .slide-up.show {
+    @apply translate-y-0;
+  }
